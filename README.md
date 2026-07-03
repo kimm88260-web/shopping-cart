@@ -2,7 +2,7 @@
 
 A small shopping cart demo built with React, TypeScript and Tailwind CSS. Product data comes live from the [DummyJSON](https://dummyjson.com) API.
 
-**Demo:** [https://shopping-cart-mu-gules.vercel.app](#)
+**Demo:** [demo](https://shopping-cart-mu-gules.vercel.app)
 
 ---
 
