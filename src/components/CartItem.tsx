@@ -26,7 +26,7 @@ const CartItems = ({ item, sItem }: Props) => {
       </div>
 
       <div className="text-[0.9rem] text-gray-600 flex items-center gap-1.5">
-        <div>${sItem.price * item.quantity}</div>
+        <div>${(sItem.price * item.quantity).toFixed(2)}</div>
         <button
           className="border border-gray-400 text-gray-500 rounded-[3px] px-2 py-1 cursor-pointer hover:text-gray-400 transition-all duration-100"
           onClick={() => removeFromCart(item.id)}

@@ -17,9 +17,8 @@ const Cart = () => {
       {/* 遮罩 */}
       <div
         onClick={() => closeCart()}
-        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       />
 
       {/* 侧边抽屉 */}
@@ -52,7 +51,7 @@ const Cart = () => {
         </div>
 
         <div className="text-[1.2rem] font-semibold text-gray-800 mt-7 tracking-wide text-right">
-          Total: ${totalPrice}
+          Total: ${totalPrice.toFixed(2)}
         </div>
       </div>
     </>
