@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# ShoppingCart
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small shopping cart demo built with React, TypeScript and Tailwind CSS. Product data comes live from the [DummyJSON](https://dummyjson.com) API.
 
-Currently, two official plugins are available:
+**Demo:** [https://shopping-cart-mu-gules.vercel.app/](#)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Browse products fetched live from an external API, with a landing page showcasing featured items
+- Search products (submit-to-search, not fired on every keystroke)
+- Filter the full catalog by category
+- Product detail page with add-to-cart
+- Persistent cart (localStorage) — survives page refresh
+- Slide-out cart drawer with quantity controls and running total
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Category | Choice |
+|---|---|
+| Framework | React + TypeScript (Vite) |
+| Styling | Tailwind CSS |
+| Routing | React Router (HashRouter) |
+| Server state / caching | TanStack Query |
+| Client state | React Context |
+| Persistence | localStorage (custom `useLocalStorage` hook) |
+| Data source | [DummyJSON](https://dummyjson.com) |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Architecture Notes
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Context vs. TanStack Query**: Context holds client-side state only (search input, cart item ids/quantities, drawer open/closed). Anything fetched from the network — product lists, product details, categories — goes through TanStack Query, so caching, loading, and error states don't have to be hand-rolled.
+- **Shared cache keys**: the product detail page and the cart drawer both query a product by id under the same query key (`["product", id]`), so switching between them doesn't trigger duplicate network requests.
+- **HashRouter**: used instead of `BrowserRouter` so client-side routes (`/store`, `/products/:id`) don't 404 on refresh when hosted as a static site on Vercel.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Running Locally
+
+```bash
+git clone https://github.com/<your-username>/shopping-cart.git
+cd shopping-cart
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── api/            # fetch functions + data normalization for the DummyJSON API
+├── context/         # React Context providers (search state, cart state)
+├── hooks/           # custom hooks (React Query wrappers, localStorage, context accessors)
+├── components/      # reusable UI (Navbar, Cart drawer, product card/grid, etc.)
+└── pages/           # route-level pages (Home, Store, ProductDetail, About)
 ```
